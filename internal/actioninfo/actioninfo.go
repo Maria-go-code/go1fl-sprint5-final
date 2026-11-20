@@ -1,9 +1,30 @@
 package actioninfo
 
+import (
+	"fmt"
+	"log"
+)
+
+// DataParser определяет общий интерфейс для парсинга и вывода информации об активности.
 type DataParser interface {
-	// TODO: добавить методы
+	Parse(datastring string) (err error)
+	ActionInfo() (string, error)
 }
 
+// Info обрабатывает срез строк с данными и выводит информацию о каждой активности.
 func Info(dataset []string, dp DataParser) {
-	// TODO: реализовать функцию
+	for _, data := range dataset {
+		if err := dp.Parse(data); err != nil {
+			log.Println(err)
+			continue
+		}
+
+		info, err := dp.ActionInfo()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		fmt.Println(info)
+	}
 }
